@@ -1,0 +1,111 @@
+/* Body style */
+body {
+    background-color: #000000;
+    margin:0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Container style */
+#container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Sidenav button style */
+#sidenav-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+
+/* Divider div style */
+.divide {
+    clear: both;
+}
+
+/* Date div style */
+#dateDiv {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Date and time style */
+#currentDate, #currentTime  {
+    float: left;
+    width: 50%;
+    color: #fff;
+}
+
+.datepicker, .timepicker {
+    color: #fff;
+}
+
+/* Volume button style */
+.volume-button {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+
+/* Loader style */
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: #000000 url(../img/loader.gif) no-repeat center center;
+    text-align: center;
+    color: #999;
+}
+
+/* Selector style */
+.select-wrapper input.select-dropdown {
+    color: #ffffff;
+}
+
+.dropdown-content.select-dropdown > li span {
+    background-color: #222222;
+}
+
+/* Padding style */
+.padding {
+    padding-bottom: 100px;
+}
+
+.right-padding {
+    padding-right: 10px;
+}
+
+/* Checkbox style */
+.switch.mycolor label input[type=checkbox]:checked+.lever {
+   background-color: #F44336;
+}
+
+.switch.mycolor label input[type=checkbox]:checked+.lever:after {
+   background-color: #e51c23;
+}
+
+/* Tooltip style */
+#tooltip {
+    position: fixed;
+    left: 0;
+    top: 0;
+    min-width: 100px;
+    text-align: center;
+    padding: 5px 12px;
+    font-family: monospace;
+    background: #323232;
+    display: none;
+    opacity: 0;
+    border: 1px solid black;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.25s linear;
+    border-radius: 3px;
+    color: #fff;
+}

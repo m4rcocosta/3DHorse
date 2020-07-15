@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute  vec4 vPosition;
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+
+        //texture
+        attribute vec2 vTexCoord;
+        varying vec2 fTexCoord;
+        attribute vec2 vLinearTexCoord;
+        varying vec2 fLinearTexCoord;
+
+        void main() {
+            fTexCoord = vTexCoord;
+            fLinearTexCoord = vLinearTexCoord;
+            gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec2 fTexCoord, fLinearTexCoord;
+        //Texures
+        uniform sampler2D torsoTexture, checkerboardTexture, horseTexture, obstacleTexture, grassTexture, linearDecreaseTexture;
+        //Flags
+        uniform bool isTorso, isObstacle, isGrass;
+
+        void main() {
+            if(isTorso) gl_FragColor = texture2D(torsoTexture, fTexCoord) * (texture2D(checkerboardTexture, fTexCoord) * texture2D(linearDecreaseTexture, fLinearTexCoord));
+            else if(isObstacle) gl_FragColor = texture2D(obstacleTexture, fTexCoord);
+            else if(isGrass) gl_FragColor = texture2D(grassTexture, fTexCoord);
+            else gl_FragColor = texture2D(horseTexture, fTexCoord);
+        }
+    </script>
+
+    <script type="text/javascript" src="./Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="./Common/initShaders.js"></script>
+    <script type="text/javascript" src="./Common/MV.js"></script>
+    <script type="text/javascript" src="Homework2.js"></script>
+
+    <body>
+        <div style="float:left;">
+            <canvas id="gl-canvas" width="1024" height="1024">
+                Oops ... your browser doesn't support the HTML5 canvas element
+            </canvas>
+        </div>
+        <div  style="float:left; padding-left:20px">
+            <div id="buttons">
+                <button id="startButton">START</button>
+                <button id="changeViewButton">CHANGE VIEW</button>
+            </div>
+            <div id="sliders" hidden>
+                Torso X angle: <input id="torsoXSlider" type="range" min="-180" max="180" step="10" value="0"/><label id="torsoXValue">0</label>
+                <br/>
+                Torso Y angle: <input id="torsoYSlider" type="range" min="-180" max="180" step="10" value="0"/><label id="torsoYValue">0</label>
+                <br/>
+                Torso Z angle: <input id="torsoZSlider" type="range" min="-180" max="180" step="10" value="0"/><label id="torsoZValue">0</label>
+                <br/>
+                Head Y angle: <input id="headYSlider" type="range" min="-180" max="180" step="10" value="-90"/><label id="headYValue">-90</label>
+                <br/>
+                Head Z angle: <input id="headZSlider" type="range" min="-180" max="180" step="10" value="0"/><label id="headZValue">0</label>
+                <br/>
+                Neck angle: <input id="neckSlider" type="range" min="-180" max="180" step="10" value="-45"/><label id="neckValue">-45</label>
+                <br/>
+                Tail angle: <input id="tailSlider" type="range" min="-180" max="180" step="10" value="135"/><label id="tailValue">135</label>
+                <br/>
+                Left upper front leg angle: <input id="leftUpperFrontLegSlider" type="range" min="0" max="360" step="10" value="180"/><label id="leftUpperFrontLegValue">180</label>
+                <br/>
+                Left lower front leg angle: <input id="leftLowerFrontLegSlider" type="range" min="-180" max="180" step="10" value="0"/><label id="leftLowerFrontLegValue">0</label>
+                <br/>
+                Right upper front leg angle: <input id="rightUpperFrontLegSlider" type="range" min="0" max="360" step="10" value="180"/><label id="rightUpperFrontLegValue">180</label>
+                <br/>
+                Right lower front leg angle: <input id="rightLowerFrontLegSlider" type="range" min="-180" max="180" step="10" value="0"/><label id="rightLowerFrontLegValue">0</label>
+                <br/>
+                Left upper back leg angle: <input id="leftUpperBackLegSlider" type="range" min="0" max="360" step="10" value="180"/><label id="leftUpperBackLegValue">180</label>
+                <br/>
+                Left lower back leg angle: <input id="leftLowerBackLegSlider" type="range" min="-90" max="90" step="10" value="0"/><label id="leftLowerBackLegValue">0</label>
+                <br/>
+                Right upper back leg angle: <input id="rightUpperBackLegSlider" type="range" min="0" max="360" step="10" value="180"/><label id="rightUpperBackLegValue">180</label>
+                <br/>
+                Right lower back leg angle: <input id="rightLowerBackLegSlider" type="range" min="-90" max="90" step="10" value="0"/><label id="rightLowerBackLegValue">0</label>
+                <br/>
+                Translation on X: <input id="sliderX" type="range" min="-30" max="30" step="0.1" value="0"/><label id="xValue">0</label>
+                <br/>
+                Translation on Y: <input id="sliderY" type="range" min="-30" max="30" step="0.1" value="0"/><label id="yValue">0</label>
+                <br/>
+                Translation on Z: <input id="sliderZ" type="range" min="-30" max="30" step="0.1" value="0"/><label id="zValue">0</label>
+                <br/>
+                Theta: <input id="thetaCameraSlider" type="range" min="-180" max="180" step="5" value="-45"/><label id="thetaCameraValue">-45</label>
+                <br/>
+                Phi: <input id="phiCameraSlider" type="range" min="-90" max="90" step="5" value="35"/><label id="phiCameraValue">35</label>
+            </div>
+        </div>
+        <img id="torsoTextureImage" src="torsoTexture.jpg" hidden></img>
+        <img id="horseTextureImage" src="horseTexture.jpg" hidden></img>
+        <img id="obstacleTextureImage" src="obstacleTexture.jpg" hidden></img>
+        <img id="grassTextureImage" src="grassTexture.jpg" hidden></img>
+    </body>
+</html>
